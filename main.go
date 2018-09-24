@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/BurntSushi/toml"
-	"github.com/atotto/clipboard"
-	"github.com/labstack/gommon/log"
 	"io"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/BurntSushi/toml"
+	"github.com/atotto/clipboard"
+	"github.com/labstack/gommon/log"
 )
 
 type Config struct {
@@ -75,7 +76,9 @@ func listAllDesc() string {
 }
 
 func Init() {
-	if _, err := toml.DecodeFile("/home/tkancf/.config/config.toml", &conf); err != nil {
+	path := os.Getenv("HOME")
+	confPath := path + "/.config" + "/rofi-snippet" + "/config.toml"
+	if _, err := toml.DecodeFile(confPath, &conf); err != nil {
 		log.Fatal(err)
 	}
 

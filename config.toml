@@ -1,0 +1,25 @@
+[[setting]]
+    application = "thunderbird"
+    [[setting.data]]
+        desc = "hoge"
+        text = "ｈごあしこｄｆｊ"
+    [[setting.data]]
+        desc = "hge"
+        text = "fdksljaｆｄｋｓじゃ"
+    [[setting.data]]
+        desc = "hoe"
+        text = "hf;ds"
+    [[setting.data]]
+        desc = "hog"
+        text = "ｆｊｄｋｓｌ；あ"
+[[setting]]
+    application = "firefox"
+    [[setting.data]]
+        desc = "hghfde"
+        text = "fdksljaｆｄｋｓじゃ"
+    [[setting.data]]
+        desc = "hoehsod"
+        text = "hf;ds"
+    [[setting.data]]
+        desc = "hogfsdjkal"
+        text = "ｆｊｄｋｓｌ；あ"
