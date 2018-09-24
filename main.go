@@ -1,7 +1,8 @@
 package main
 
 import (
-	"bytes"
+	"github.com/BurntSushi/toml"
+	"github.com/atotto/clipboard"
 	"github.com/labstack/gommon/log"
 	"io"
 	"os"
@@ -9,43 +10,73 @@ import (
 	"strings"
 )
 
+type Config struct {
+	Settings []Setting `toml:"setting"`
+}
+
+type Setting struct {
+	Application string `toml:"application"`
+	Data        []Data `toml:"data"`
+}
+
+type Data struct {
+	Desc string `toml:"desc"`
+	Text string `toml:"text"`
+}
+
+var conf Config
+
 func main() {
-	err, out := getResult("rofi -dmenu -sep '|'", strings.NewReader(printKeys()))
+	Init()
+	listAllDesc()
+	err, out := getResult("rofi -dmenu -sep '|'", strings.NewReader(listAllDesc()))
 	if err != nil {
 		log.Fatal(err)
 	}
+	clipboard.WriteAll(descToText(out))
 
-	var buf bytes.Buffer
-	err = run("rofi -dmenu", strings.NewReader(string(out)), &buf)
-	if err != nil {
-		log.Fatal(err)
-	}
+	exec.Command("sh", "-c", "xdotool key shift+Insert").Run()
 }
 
-func printKeys() string {
-	m := map[string]string{"testん;ほげ": "test文字列", "hoge": "hogeohhoge", "bar": "bar"}
-	keys := []string{}
-	for k := range m {
-		keys = append(keys, k)
+func descToText(desc string) string {
+	desc = strings.TrimRight(desc, "\n")
+	text := ""
+	for _, value := range conf.Settings {
+		for _, v := range value.Data {
+			if desc == v.Desc {
+				return v.Text
+			}
+		}
 	}
-	keyString := strings.Join(keys, "|")
-	return keyString
+	return text
 }
 
-func getResult(command string, r io.Reader) (error, []byte) {
+func getResult(command string, r io.Reader) (error, string) {
 	var cmd *exec.Cmd
 	cmd = exec.Command("sh", "-c", command)
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = r
 	out, err := cmd.Output()
-	return err, out
+	result := strings.TrimRight(string(out), "\n")
+	return err, result
 }
 
-func run(command string, r io.Reader, w io.Writer) error {
-	var cmd *exec.Cmd
-	cmd = exec.Command("sh", "-c", command)
-	cmd.Stderr = os.Stderr
-	cmd.Stdout = w
-	cmd.Stdin = r
-	return cmd.Run()
+func listAllDesc() string {
+	var all []byte
+
+	for _, value := range conf.Settings {
+		for _, v := range value.Data {
+			all = append(all, []byte(v.Desc)...)
+			all = append(all, []byte("|")...)
+		}
+	}
+
+	return string(all)
+}
+
+func Init() {
+	if _, err := toml.DecodeFile("/home/tkancf/.config/config.toml", &conf); err != nil {
+		log.Fatal(err)
+	}
+
 }
