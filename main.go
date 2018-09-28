@@ -34,9 +34,18 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	preClip, err := clipboard.ReadAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	clipboard.WriteAll(descToText(out))
 
 	exec.Command("sh", "-c", "xdotool key shift+Insert").Run()
+
+	clipboard.WriteAll(preClip)
+
 }
 
 func descToText(desc string) string {
@@ -62,6 +71,15 @@ func getResult(command string, r io.Reader) (error, string) {
 	return err, result
 }
 
+func run(command string, r io.Reader, w io.Writer) error {
+	var cmd *exec.Cmd
+	cmd = exec.Command("sh", "-c", command)
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = w
+	cmd.Stdin = r
+	return cmd.Run()
+}
+
 func listAllDesc() string {
 	var all []byte
 
@@ -76,8 +94,7 @@ func listAllDesc() string {
 }
 
 func Init() {
-	path := os.Getenv("HOME")
-	confPath := path + "/.config" + "/rofi-snippet" + "/config.toml"
+	confPath := "/etc" + "/rofi-snippet" + "/config.toml"
 	if _, err := toml.DecodeFile(confPath, &conf); err != nil {
 		log.Fatal(err)
 	}

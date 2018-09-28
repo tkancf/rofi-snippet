@@ -1,4 +1,5 @@
 #!/bin/bash
 
-mkdir -p $HOME/.config/rofi-snippet/
-cp ./config.toml $HOME/.config/rofi-snippet/config.toml
+sudo mkdir -p /etc/rofi-snippet/
+sudo cp ./config.toml /etc/rofi-snippet/
+go install .

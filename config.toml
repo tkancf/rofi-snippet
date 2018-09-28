@@ -2,7 +2,7 @@
     application = "thunderbird"
     [[setting.data]]
         desc = "hoge"
-        text = "ｈごあしこｄｆｊ"
+        text = "ｈごあしこｄｆｊ\nfjdskl"
     [[setting.data]]
         desc = "hge"
         text = "fdksljaｆｄｋｓじゃ"
