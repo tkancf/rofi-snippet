@@ -9,15 +9,18 @@ rofi-snippet relies on some command line tools
 - xsel
 - rofi
 
+In addition, needs golang
+
 For example, for Ubuntu you can get what you need with the following commands
 
 ```bash
 sudo apt install xsel
 sudo apt install xdotool
 sudo apt install rofi
+sudo apt install golang-go
 ```
 
-↓create directory & copy config sample file
+↓Install script & copy config sample file
 
 ```bash
 sh install.sh
