@@ -29,23 +29,24 @@ var conf Config
 
 func main() {
 	Init()
-	listAllDesc()
-	err, out := getResult("rofi -dmenu -sep '|'", strings.NewReader(listAllDesc()))
-	if err != nil {
-		log.Fatal(err)
-	}
+	list := listAllDesc()
+	reader := strings.NewReader(list)
 
 	preClip, err := clipboard.ReadAll()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	clipboard.WriteAll(descToText(out))
+	err, desc := getResult("rofi -dmenu -sep '|'", reader)
+	if err != nil {
+		log.Fatal(err)
+	}
+	text := descToText(desc)
+	clipboard.WriteAll(text)
 
 	exec.Command("sh", "-c", "xdotool key shift+Insert").Run()
 
 	clipboard.WriteAll(preClip)
-
 }
 
 func descToText(desc string) string {
