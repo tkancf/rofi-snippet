@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/atotto/clipboard"
@@ -44,7 +45,9 @@ func main() {
 	text := descToText(desc)
 	clipboard.WriteAll(text)
 
+	time.Sleep(30 * time.Millisecond)
 	exec.Command("sh", "-c", "xdotool key shift+Insert").Run()
+	time.Sleep(30 * time.Millisecond)
 
 	clipboard.WriteAll(preClip)
 }
