@@ -52,7 +52,6 @@ Restart `i3`. By pressing `$mod+Shift+d`, it'll bring up the `rofi-snippet`.
 
 👤 **tkancf**
 
-* Website: https://ggdg.tkan.dev
 * Github: [@tkancf](https://github.com/tkancf)
 
 ## Show your support
